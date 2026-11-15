@@ -49,7 +49,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
     <style>
-        /* Estilos personalizados complementarios y animaciones suaves */
         body {
             background-color: #FAF8F5;
             color: #1F2937;
@@ -61,27 +60,14 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        /* Animaciones de transición entre diapositivas */
         @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(24px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(-24px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .animate-slide-next {
@@ -92,12 +78,10 @@
             animation: slideInLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Animación de barras de progreso */
         .progress-bar-fill {
             transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        /* Ocultar flechas predeterminadas en input number para estética más limpia */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -107,7 +91,6 @@
             -moz-appearance: textfield;
         }
 
-        /* Acordeón suave para detalles por campo */
         details > summary {
             list-style: none;
         }
@@ -115,7 +98,6 @@
             display: none;
         }
 
-        /* Transición suave para el panel lateral QR en versión PC */
         #desktopQrSidebar {
             transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                         opacity 0.25s ease,
@@ -138,27 +120,16 @@
             }
         }
 
-        /* Estilos para impresión */
         @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background-color: #FFFFFF !important;
-            }
-            .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl {
-                box-shadow: none !important;
-                border: 1px solid #E5E7EB !important;
-            }
-            details[open] summary ~ * {
-                display: block !important;
-            }
+            .no-print { display: none !important; }
+            body { background-color: #FFFFFF !important; }
+            .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; border: 1px solid #E5E7EB !important; }
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-nem-mint selection:text-nem-forest">
 
-    <!-- ENCABEZADO INSTITUCIONAL COMPACTO Y CÁLIDO -->
+    <!-- ENCABEZADO INSTITUCIONAL -->
     <header class="bg-gradient-to-br from-nem-forest via-[#23533E] to-nem-emerald text-white shadow-md relative overflow-hidden">
         <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/5 pointer-events-none"></div>
         <div class="absolute right-12 -bottom-12 w-28 h-28 rounded-full bg-nem-sage/10 pointer-events-none"></div>
@@ -176,7 +147,11 @@
                             </span>
                         </div>
                         <h1 class="font-display text-base sm:text-xl font-extrabold leading-tight tracking-tight text-white mt-0.5">
-                <!-- Indicador de Paso en Encabezado y Botón QR exclusivo de PC -->
+                            Escuela Primaria "Guadalupe Victoria"
+                        </h1>
+                    </div>
+                </div>
+
                 <div class="no-print flex items-center gap-2 shrink-0">
                     <button id="btnToggleDesktopQr" type="button" onclick="toggleDesktopQr()" aria-expanded="true" aria-controls="desktopQrSidebar"
                         class="hidden lg:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 active:scale-95 border border-white/25 text-xs font-display font-bold text-white transition cursor-pointer shadow-2xs"
@@ -188,67 +163,97 @@
                     </button>
 
                     <span id="headerStepBadge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 border border-white/20 text-xs font-display font-bold text-amber-200">
-                        <span>Diapositiva 1 de 4</span>
+                        <span>Diapositiva 1 de 6</span>
                     </span>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- BARRA DE PROGRESO DE DIAPOSITIVAS (SOLO MUESTRA PASOS DE GRUPO HASTA DESBLOQUEAR) -->
+    <!-- BARRA DE PROGRESO DE DIAPOSITIVAS -->
     <div id="slideProgressBar" class="no-print sticky top-0 z-30 bg-nem-cream/95 backdrop-blur-md border-b border-stone-200/80 shadow-2xs">
         <div class="max-w-6xl mx-auto px-4 py-2.5">
             <div class="flex items-center justify-between gap-2 max-w-3xl mx-auto">
-                <!-- Puntos indicadores de las 4 diapositivas del grupo -->
                 <div id="stepIndicators" class="flex items-center gap-1.5 sm:gap-2 flex-1">
-                    <button type="button" onclick="goToSlide(0)" data-step="0"
-                        class="step-dot flex-1 h-2.5 rounded-full bg-nem-forest transition-all duration-300 cursor-pointer"
-                        aria-label="Diapositiva 1: Panorama General"></button>
-                    <button type="button" onclick="goToSlide(1)" data-step="1"
-                        class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer"
-                        aria-label="Diapositiva 2: Comparativa por Campos"></button>
-                    <button type="button" onclick="goToSlide(2)" data-step="2"
-                        class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer"
-                        aria-label="Diapositiva 3: Frecuencia de Calificaciones"></button>
-                    <button type="button" onclick="goToSlide(3)" data-step="3"
-                        class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer"
-                        aria-label="Diapositiva 4: Acuerdos en Casa"></button>
-                    <!-- Paso 5: Oculto hasta completar las 4 diapositivas del grupo -->
-                    <button id="stepDot5" type="button" onclick="goToSlide(4)" data-step="4"
-                        class="step-dot hidden flex-1 h-2.5 rounded-full bg-nem-terracotta transition-all duration-300 cursor-pointer"
-                        aria-label="Diapositiva 5: Consulta Individual"></button>
+                    <button type="button" onclick="goToSlide(0)" data-step="0" class="step-dot flex-1 h-2.5 rounded-full bg-nem-forest transition-all duration-300 cursor-pointer" aria-label="Diapositiva 1: Bienvenida"></button>
+                    <button type="button" onclick="goToSlide(1)" data-step="1" class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer" aria-label="Diapositiva 2: Panorama General"></button>
+                    <button type="button" onclick="goToSlide(2)" data-step="2" class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer" aria-label="Diapositiva 3: Proyectos STEM"></button>
+                    <button type="button" onclick="goToSlide(3)" data-step="3" class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer" aria-label="Diapositiva 4: Campos Formativos"></button>
+                    <button type="button" onclick="goToSlide(4)" data-step="4" class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer" aria-label="Diapositiva 5: Frecuencia"></button>
+                    <button type="button" onclick="goToSlide(5)" data-step="5" class="step-dot flex-1 h-2.5 rounded-full bg-stone-300 hover:bg-stone-400 transition-all duration-300 cursor-pointer" aria-label="Diapositiva 6: Problemáticas"></button>
+                    <!-- Paso 7 (Individual): Oculto hasta desbloquear -->
+                    <button id="stepDot7" type="button" onclick="goToSlide(6)" data-step="6" class="step-dot hidden flex-1 h-2.5 rounded-full bg-nem-terracotta transition-all duration-300 cursor-pointer" aria-label="Diapositiva 7: Consulta Individual"></button>
                 </div>
                 <span id="stepTitleShort" class="text-[11px] sm:text-xs font-bold text-stone-600 pl-2 shrink-0">
-                    1/4 • Panorama
+                    1/6 • Bienvenida
                 </span>
             </div>
         </div>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL: GRID CON PANEL QR EXCLUSIVO EN PC (lg:flex) -->
+    <!-- CONTENEDOR PRINCIPAL -->
     <div id="mainLayoutContainer" class="flex-1 max-w-6xl w-full mx-auto px-4 py-5 pb-28 flex flex-col lg:flex-row gap-6 items-start transition-all duration-300">
 
-        <!-- ÁREA DE DIAPOSITIVAS (CENTRADA EN MÓVIL, COLUMNA PRINCIPAL EN PC) -->
+        <!-- ÁREA DE DIAPOSITIVAS -->
         <main id="slidesViewport" class="w-full lg:flex-1 max-w-3xl mx-auto transition-all duration-300">
 
             <!-- ============================================================== -->
-            <!-- DIAPOSITIVA 1: BIENVENIDA Y PANORAMA GENERAL 🏆                -->
+            <!-- DIAPOSITIVA 1: BIENVENIDA Y PRESENTACIÓN DE LA REUNIÓN 🎤      -->
             <!-- ============================================================== -->
-            <section id="slide-0" class="slide-panel animate-slide-next space-y-4" aria-label="Diapositiva 1: Bienvenida y Panorama General">
-                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
-                    <div class="flex items-start justify-between gap-3">
-                        <div>
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100/80 text-amber-900 mb-2">
-                                <span>🏆</span> Bienvenida y Panorama General
-                            </span>
-                            <h2 class="font-display text-xl sm:text-2xl font-extrabold text-stone-800 leading-tight">
-                                ¡Gracias por acompañar el crecimiento de 5° Grado!
-                            </h2>
-                            <p class="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed">
-                                Presentamos los logros alcanzados por nuestros <strong>11 estudiantes</strong> durante el Primer Trimestre. Desliza o usa los botones inferiores para recorrer cada resultado.
-                            </p>
+            <section id="slide-0" class="slide-panel animate-slide-next space-y-4" aria-label="Diapositiva 1: Bienvenida">
+                <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/85 text-center relative overflow-hidden">
+                    <div class="absolute -left-10 -bottom-10 w-36 h-36 bg-nem-mint/40 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute -right-10 -top-10 w-36 h-36 bg-amber-100/50 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-nem-mint text-nem-forest mb-4 shadow-2xs">
+                        <span>👋</span> Reunión de Entrega de Resultados
+                    </span>
+
+                    <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-stone-900 leading-tight">
+                        Bienvenidos a la Entrega de Evaluaciones del Primer Trimestre
+                    </h2>
+
+                    <p class="text-sm sm:text-base text-stone-600 mt-3 max-w-xl mx-auto leading-relaxed">
+                        Agradecemos profundamente su valiosa asistencia y compromiso con el aprendizaje de sus hijos(as). Hoy revisaremos los puntos más importantes de nuestro grupo de <strong>5° Grado</strong>.
+                    </p>
+
+                    <!-- Tarjetas de Agenda de la Reunión -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-6 text-left">
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-white border border-emerald-200/80">
+                            <span class="text-xl block mb-1">📊</span>
+                            <h3 class="font-display font-bold text-xs sm:text-sm text-nem-forest">1. Panorama General</h3>
+                            <p class="text-[11px] sm:text-xs text-stone-600 mt-0.5">Promedios y distribución de calificaciones del grupo.</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-200/80">
+                            <span class="text-xl block mb-1">🚀</span>
+                            <h3 class="font-display font-bold text-xs sm:text-sm text-amber-900">2. Proyectos STEM+</h3>
+                            <p class="text-[11px] sm:text-xs text-stone-600 mt-0.5">Participación destacada de nuestros alumnos en tecnología.</p>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-rose-50/70 to-white border border-rose-200/80">
+                            <span class="text-xl block mb-1">💡</span>
+                            <h3 class="font-display font-bold text-xs sm:text-sm text-nem-terracotta">3. Retos y Boleta</h3>
+                            <p class="text-[11px] sm:text-xs text-stone-600 mt-0.5">Áreas de oportunidad grupales y consulta individual.</p>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- ============================================================== -->
+            <!-- DIAPOSITIVA 2: PANORAMA GENERAL 🏆                             -->
+            <!-- ============================================================== -->
+            <section id="slide-1" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 2: Panorama General">
+                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100/80 text-amber-900 mb-2">
+                        <span>🏆</span> Panorama General del Grupo
+                    </span>
+                    <h2 class="font-display text-xl sm:text-2xl font-extrabold text-stone-800 leading-tight">
+                        Logros alcanzados por nuestros 11 estudiantes
+                    </h2>
+                    <p class="text-xs sm:text-sm text-stone-600 mt-1.5 leading-relaxed">
+                        Evaluación correspondiente al Primer Trimestre del ciclo escolar 2026–2027.
+                    </p>
 
                     <!-- Tarjetas KPI Principales -->
                     <div class="grid grid-cols-2 gap-3 mt-4">
@@ -267,14 +272,12 @@
                         </div>
                     </div>
 
-                    <!-- Gráfico de Pastel / Dona: Distribución de Promedios -->
+                    <!-- Gráfico Dona -->
                     <div class="mt-5 pt-4 border-t border-stone-100">
                         <h3 class="font-display text-sm sm:text-base font-extrabold text-stone-800 text-center mb-3">
-                            Distribución de Niveles de Desempeño del Grupo
+                            Distribución de Niveles de Desempeño
                         </h3>
-
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
-                            <!-- Canvas Chart.js Dona -->
                             <div class="relative w-48 h-48 sm:w-52 sm:h-52 shrink-0">
                                 <canvas id="chartDonaGrupo" aria-label="Gráfico circular de distribución de promedios"></canvas>
                                 <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
@@ -284,7 +287,6 @@
                                 </div>
                             </div>
 
-                            <!-- Leyenda explicativa clara y anímica -->
                             <div class="w-full sm:flex-1 space-y-2.5">
                                 <div class="flex items-center justify-between p-2.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/80">
                                     <div class="flex items-center gap-2.5">
@@ -325,9 +327,66 @@
             </section>
 
             <!-- ============================================================== -->
-            <!-- DIAPOSITIVA 2: COMPARATIVA POR CAMPOS FORMATIVOS 📊            -->
+            <!-- DIAPOSITIVA 3: PROYECTOS ESCOLARES Y OLIMPIADAS STEM+ 🤖       -->
             <!-- ============================================================== -->
-            <section id="slide-1" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 2: Comparativa por Campos Formativos">
+            <section id="slide-2" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 3: Proyectos Escolares STEM">
+                <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-900 mb-2">
+                        <span>🚀</span> Innovación y Proyectos Escolares
+                    </span>
+                    <h2 class="font-display text-xl sm:text-2xl font-extrabold text-stone-800">
+                        Participación en las "Olimpiadas STEM+ RAICES DEL FUTURO 2026"
+                    </h2>
+                    <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+                        Durante este trimestre hemos impulsado el pensamiento científico, la creatividad tecnológica y la resolución de problemas mediante proyectos STEM colaborativos con los alumnos.
+                    </p>
+
+                    <!-- Tarjeta destacada con video e iframe / enlace -->
+                    <div class="mt-4 bg-gradient-to-br from-slate-900 to-nem-forest rounded-2xl p-4 sm:p-5 text-white shadow-md relative overflow-hidden">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-400 text-slate-900 text-2xl flex items-center justify-center shrink-0 font-bold shadow-sm">
+                                🏆
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-extrabold uppercase tracking-widest text-amber-300">Proyecto Destacado 2026</span>
+                                <h3 class="font-display text-base sm:text-lg font-extrabold text-white mt-0.5">
+                                    Olimpiadas STEM+ Raíces del Futuro
+                                </h3>
+                                <p class="text-xs text-emerald-100 mt-1 leading-relaxed">
+                                    Conoce el video oficial que documenta la participación, el esfuerzo y el entusiasmo de nuestros estudiantes en este importante encuentro tecnológico:
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Botón directo de reproducción al link de YouTube proporcionado -->
+                        <div class="mt-4 pt-3.5 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3">
+                            <div class="flex items-center gap-2 text-xs font-mono text-emerald-200 truncate">
+                                <svg class="w-4 h-4 text-red-400 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                                <span class="truncate">https://youtu.be/TPN1DdfzNcg</span>
+                            </div>
+
+                            <a href="https://youtu.be/TPN1DdfzNcg" target="_blank" rel="noopener noreferrer"
+                                class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-display font-bold text-xs shadow-md transition flex items-center justify-center gap-2 shrink-0 cursor-pointer">
+                                <span>Ver Video en YouTube ▶</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-4 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-xs sm:text-sm text-stone-700 leading-relaxed flex items-start gap-2.5">
+                        <span class="text-base shrink-0">💡</span>
+                        <p>
+                            <strong class="text-amber-900">Impacto pedagógico:</strong> La integración de ciencias, tecnología, ingeniería y matemáticas estimula el pensamiento crítico y la confianza de las niñas y niños al enfrentar retos reales de su comunidad.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================== -->
+            <!-- DIAPOSITIVA 4: COMPARATIVA POR CAMPOS FORMATIVOS 📊            -->
+            <!-- ============================================================== -->
+            <section id="slide-3" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 4: Campos Formativos">
                 <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-900 mb-2">
                         <span>📊</span> Plan de Estudios NEM
@@ -341,12 +400,12 @@
 
                     <!-- Gráfico de Barras Chart.js -->
                     <div class="mt-4 bg-nem-cream/60 rounded-2xl p-3 sm:p-4 border border-stone-200/70">
-                        <div class="relative w-full h-56 sm:h-64">
+                        <div class="relative w-full h-52 sm:h-60">
                             <canvas id="chartBarrasCampos" aria-label="Gráfico de barras de promedios por campo formativo"></canvas>
                         </div>
                     </div>
 
-                    <!-- Tarjetas breves y anímicas -->
+                    <!-- Tarjetas breves -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                         <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80">
                             <div class="flex items-center gap-2 font-display font-bold text-sm text-nem-forest">
@@ -372,9 +431,9 @@
             </section>
 
             <!-- ============================================================== -->
-            <!-- DIAPOSITIVA 3: FRECUENCIA DE CALIFICACIONES POR CAMPO 📈       -->
+            <!-- DIAPOSITIVA 5: FRECUENCIA DE CALIFICACIONES 📈                 -->
             <!-- ============================================================== -->
-            <section id="slide-2" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 3: Frecuencia de Calificaciones">
+            <section id="slide-4" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 5: Frecuencia de Calificaciones">
                 <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-nem-forest mb-2">
                         <span>📈</span> Frecuencia de Logros
@@ -383,89 +442,90 @@
                         ¿Cuántos alumnos obtuvieron 9, 8 y 7?
                     </h2>
                     <p class="text-xs sm:text-sm text-stone-600 mt-1">
-                        Observa cómo se distribuyen nuestros <strong>11 estudiantes</strong> en cada campo formativo. ¡Ningún alumno tiene calificación reprobatoria!
+                        Distribución de nuestros <strong>11 estudiantes</strong> en cada campo formativo. ¡Ningún alumno tiene calificación reprobatoria!
                     </p>
 
-                    <!-- Gráfico de Barras Apiladas Chart.js -->
                     <div class="mt-4 bg-nem-cream/60 rounded-2xl p-3 sm:p-4 border border-stone-200/70">
-                        <div class="relative w-full h-64 sm:h-72">
-                            <canvas id="chartFrecuenciaCampos" aria-label="Gráfico de barras apiladas de frecuencia de calificaciones por campo"></canvas>
+                        <div class="relative w-full h-60 sm:h-68">
+                            <canvas id="chartFrecuenciaCampos" aria-label="Gráfico de barras apiladas de frecuencia de calificaciones"></canvas>
                         </div>
                     </div>
 
-                    <!-- Resumen amigable de lectura del gráfico -->
                     <div class="mt-4 p-4 rounded-2xl bg-gradient-to-r from-nem-mint/50 to-amber-50/60 border border-emerald-200/70 flex items-start gap-3">
                         <span class="text-2xl shrink-0">💡</span>
                         <div class="text-xs sm:text-sm text-stone-700 leading-relaxed">
-                            <strong class="text-nem-forest">Lectura positiva para familias:</strong> En <em>Lenguajes</em> y <em>Ética</em>, <strong>10 de 11 alumnos</strong> alcanzaron 8 o 9. En <em>Saberes</em>, <strong>5 alumnos</strong> requieren acompañamiento extra en operaciones básicas, un reto totalmente alcanzable con apoyo en casa.
+                            <strong class="text-nem-forest">Lectura positiva para familias:</strong> En <em>Lenguajes</em> y <em>Ética</em>, <strong>10 de 11 alumnos</strong> alcanzaron 8 o 9. En <em>Saberes</em>, <strong>5 alumnos</strong> requieren acompañamiento extra en operaciones básicas.
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- ============================================================== -->
-            <!-- DIAPOSITIVA 4: ACUERDOS Y COMPROMISOS EN CASA 🏡✨             -->
+            <!-- DIAPOSITIVA 6: PROBLEMÁTICAS DEL GRUPO (CONDUCTA, COMPRENSIÓN Y ORATORIA) ⚠️ -->
             <!-- ============================================================== -->
-            <section id="slide-3" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 4: Acuerdos y Compromisos en Casa">
+            <section id="slide-5" class="slide-panel hidden animate-slide-next space-y-4" aria-label="Diapositiva 6: Problemáticas del Grupo">
                 <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-nem-terracotta mb-2">
-                        <span>🏡✨</span> Alianza Familia – Escuela
+                        <span>⚠️🎯</span> Retos Académicos y Convivencia
                     </span>
                     <h2 class="font-display text-xl sm:text-2xl font-extrabold text-stone-800">
-                        3 Compromisos Sencillos para el 2° Trimestre
+                        Principales Problemáticas Identificadas en el Grupo
                     </h2>
-                    <p class="text-xs sm:text-sm text-stone-600 mt-1">
-                        Con pequeñas rutinas diarias desde casa potenciaremos los logros de todo el grupo:
+                    <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+                        Para lograr mejores resultados en el Segundo Trimestre, es fundamental atender en equipo estas 3 áreas prioritarias detectadas con el grupo:
                     </p>
 
-                    <div class="space-y-3 mt-4">
-                        <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-rose-50/80 to-white border border-rose-200/80">
-                            <div class="w-11 h-11 rounded-2xl bg-rose-100 text-2xl flex items-center justify-center shrink-0">
+                    <div class="space-y-3.5 mt-4">
+                        <!-- 1. Conducta -->
+                        <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-rose-50/70 to-white border border-rose-200/80">
+                            <div class="w-11 h-11 rounded-2xl bg-rose-100 text-2xl flex items-center justify-center shrink-0 shadow-2xs">
+                                🤝
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-stone-800 text-sm sm:text-base">
+                                    1. Regulación de Conducta y Atención
+                                </h3>
+                                <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+                                    Se observa la necesidad de fortalecer la autorregulación, el respeto a los turnos de participación y el seguimiento constante de acuerdos de convivencia dentro y fuera del aula para optimizar el tiempo de aprendizaje.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 2. Comprensión Lectora -->
+                        <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-amber-50/80 to-white border border-amber-200/80">
+                            <div class="w-11 h-11 rounded-2xl bg-amber-100 text-2xl flex items-center justify-center shrink-0 shadow-2xs">
                                 📖
                             </div>
                             <div>
                                 <h3 class="font-display font-bold text-stone-800 text-sm sm:text-base">
-                                    1. Lectura en familia 15 minutos al día
+                                    2. Comprensión Lectora e Interpretación
                                 </h3>
-                                <p class="text-xs sm:text-sm text-stone-600 mt-0.5 leading-relaxed">
-                                    Leer juntos textos de su interés, platicar qué entendieron y revisar con cariño la ortografía de sus cuadernos.
+                                <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+                                    Varios alumnos presentan dificultades para identificar ideas principales, extraer información implícita y analizar textos complejos. Requieren práctica diaria de lectura guiada de 15 minutos en casa.
                                 </p>
                             </div>
                         </div>
 
-                        <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-amber-50/80 to-white border border-amber-200/80">
-                            <div class="w-11 h-11 rounded-2xl bg-amber-100 text-2xl flex items-center justify-center shrink-0">
-                                🛒
+                        <!-- 3. Problemas de Oratoria -->
+                        <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-sky-50/80 to-white border border-sky-200/80">
+                            <div class="w-11 h-11 rounded-2xl bg-sky-100 text-2xl flex items-center justify-center shrink-0 shadow-2xs">
+                                🎤
                             </div>
                             <div>
                                 <h3 class="font-display font-bold text-stone-800 text-sm sm:text-base">
-                                    2. Matemáticas en compras y juegos cotidianos
+                                    3. Expresión Oral y Problemas de Oratoria
                                 </h3>
-                                <p class="text-xs sm:text-sm text-stone-600 mt-0.5 leading-relaxed">
-                                    Pedirles que calculen el cambio en la tienda, repartan porciones o midan ingredientes para dominar multiplicación y división.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start gap-3.5 p-4 rounded-2xl bg-gradient-to-r from-emerald-50/80 to-white border border-emerald-200/80">
-                            <div class="w-11 h-11 rounded-2xl bg-emerald-100 text-2xl flex items-center justify-center shrink-0">
-                                ⏰
-                            </div>
-                            <div>
-                                <h3 class="font-display font-bold text-stone-800 text-sm sm:text-base">
-                                    3. Rutina fija de estudio y diálogo emocional
-                                </h3>
-                                <p class="text-xs sm:text-sm text-stone-600 mt-0.5 leading-relaxed">
-                                    Destinar un espacio tranquilo para tareas, preparar su mochila juntos y conversar sobre cómo se sintieron en la escuela.
+                                <p class="text-xs sm:text-sm text-stone-600 mt-1 leading-relaxed">
+                                    Al exponer o explicar sus ideas frente al grupo, algunos estudiantes muestran inseguridad, volumen bajo de voz y pausas prolongadas. Impulsar la expresión oral en casa les dará mayor seguridad y liderazgo.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- BOTÓN LLAMATIVO DESBLOQUEADO PARA IR A CONSULTA INDIVIDUAL -->
+                    <!-- BOTÓN LLAMATIVO PARA IR A CONSULTA INDIVIDUAL -->
                     <div class="mt-6 pt-5 border-t border-stone-200/80 text-center">
                         <p class="text-xs font-semibold text-stone-500 mb-2.5">
-                            ¡Has completado el panorama del grupo! Ahora puedes revisar la boleta personalizada:
+                            ¡Hemos concluido el panorama general y retos del grupo! Ahora puedes revisar la boleta de tu hijo(a):
                         </p>
                         <button type="button" onclick="unlockAndGoToIndividual()"
                             class="w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-nem-terracotta to-nem-guinda hover:brightness-110 active:scale-[0.99] transition text-white font-display font-extrabold text-base sm:text-lg shadow-lg flex items-center justify-center gap-2.5 cursor-pointer">
@@ -479,9 +539,9 @@
             </section>
 
             <!-- ============================================================== -->
-            <!-- DIAPOSITIVA 5: CONSULTA INDIVIDUAL DE MI HIJO(A) 🎓            -->
+            <!-- DIAPOSITIVA 7: CONSULTA INDIVIDUAL DE MI HIJO(A) 🎓            -->
             <!-- ============================================================== -->
-            <section id="slide-4" class="slide-panel hidden animate-slide-next space-y-5" aria-label="Diapositiva 5: Consulta Individual">
+            <section id="slide-6" class="slide-panel hidden animate-slide-next space-y-5" aria-label="Diapositiva 7: Consulta Individual">
 
                 <!-- FORMULARIO DE ACCESO SEGURO -->
                 <div id="loginCard" class="bg-white rounded-3xl p-5 sm:p-7 shadow-sm border border-stone-200/80">
@@ -500,11 +560,10 @@
                     </div>
 
                     <p class="text-sm text-stone-600 mb-5 leading-relaxed">
-                        Para cuidar la privacidad de cada estudiante, selecciona su nombre en la lista e ingresa el <strong>día de su cumpleaños</strong>.
+                        Selecciona su nombre en la lista e ingresa el <strong>día de su cumpleaños</strong> para consultar su boleta personalizada.
                     </p>
 
                     <form id="consultaForm" class="space-y-4" novalidate>
-                        <!-- Selector de Alumno -->
                         <div>
                             <label for="selectAlumno" class="block text-sm font-bold text-stone-800 mb-1.5">
                                 1. Selecciona el nombre de tu hijo(a):
@@ -522,7 +581,6 @@
                             </div>
                         </div>
 
-                        <!-- Input Día de Cumpleaños -->
                         <div>
                             <label for="inputDia" class="block text-sm font-bold text-stone-800 mb-1.5">
                                 2. Día de cumpleaños (1 o 2 dígitos):
@@ -531,42 +589,37 @@
                                 class="w-full bg-nem-cream border-2 border-stone-300 focus:border-nem-forest focus:bg-white rounded-2xl py-3.5 px-4 text-lg font-display font-bold text-stone-800 placeholder:text-stone-400 placeholder:font-normal transition outline-none" />
                             <p class="text-xs text-stone-500 mt-1.5 flex items-center gap-1.5">
                                 <span>🎂</span>
-                                <span>Escribe únicamente el número del día en que nació tu hijo(a) (por ejemplo: <strong>08</strong> o <strong>27</strong>).</span>
+                                <span>Escribe únicamente el número del día en que nació tu hijo(a).</span>
                             </p>
                         </div>
 
-                        <!-- Mensaje de Error Amable -->
                         <div id="errorBox" role="alert" class="hidden p-3.5 rounded-2xl bg-rose-50 border border-rose-300 text-nem-terracotta text-sm font-medium flex items-start gap-2.5">
                             <span class="text-base shrink-0">⚠️</span>
-                            <span id="errorText">El día de cumpleaños no coincide con el registro del alumno. Verifica el dato e intenta nuevamente.</span>
+                            <span id="errorText">El día de cumpleaños no coincide con el registro del alumno.</span>
                         </div>
 
-                        <!-- Botón de Envío -->
                         <button type="submit"
                             class="w-full py-4 px-5 rounded-2xl bg-nem-forest hover:bg-[#143326] active:scale-[0.99] transition text-white font-display font-bold text-base shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2">
                             <span>Ver Boleta y Talentos de mi Hijo(a) ✨</span>
                         </button>
                     </form>
 
-                    <!-- Botón volver a ver resultados del grupo -->
                     <div class="mt-5 pt-4 border-t border-stone-100 text-center">
                         <button type="button" onclick="goToSlide(0)"
                             class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-stone-600 hover:text-nem-forest py-2 px-3 rounded-xl hover:bg-stone-100 transition cursor-pointer">
-                            <span>← Volver a ver resultados del grupo</span>
+                            <span>← Volver al inicio de la presentación</span>
                         </button>
                     </div>
                 </div>
 
                 <!-- ============================================================== -->
-                <!-- BOLETA INDIVIDUAL CELEBRATORIA Y EMOTIVA                       -->
+                <!-- BOLETA INDIVIDUAL                                              -->
                 <!-- ============================================================== -->
                 <div id="studentReport" class="hidden animate-slide-next space-y-5">
-
-                    <!-- Barra superior de acciones rápidas -->
                     <div class="no-print flex flex-wrap items-center justify-between gap-2 bg-white px-4 py-3 rounded-2xl border border-stone-200/80 shadow-xs">
                         <button type="button" onclick="goToSlide(0)"
                             class="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-stone-600 hover:text-nem-forest py-1.5 px-2.5 rounded-xl hover:bg-stone-100 transition cursor-pointer">
-                            <span>← Volver a ver resultados del grupo</span>
+                            <span>← Volver al inicio</span>
                         </button>
 
                         <div class="flex items-center gap-2">
@@ -582,7 +635,6 @@
                         </div>
                     </div>
 
-                    <!-- Tarjeta Celebratoria de Encabezado del Alumno -->
                     <div class="bg-gradient-to-br from-nem-forest via-[#23533E] to-nem-emerald text-white rounded-3xl p-5 sm:p-6 shadow-md relative overflow-hidden">
                         <div class="absolute -right-6 -bottom-6 text-7xl opacity-15 pointer-events-none select-none">🎓</div>
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
@@ -599,7 +651,6 @@
                                 </p>
                             </div>
 
-                            <!-- Insignia Visual de Promedio -->
                             <div class="bg-white text-stone-800 rounded-2xl p-3.5 sm:p-4 text-center sm:min-w-[160px] shadow-md border-2 border-amber-300 shrink-0">
                                 <span class="block text-[10px] font-extrabold uppercase tracking-wider text-amber-800">Promedio Trimestral</span>
                                 <div class="flex items-center justify-center gap-1.5 my-1">
@@ -613,7 +664,6 @@
                         </div>
                     </div>
 
-                    <!-- SECCIÓN ESPECIAL (CORAZÓN EMOTIVO): LO QUE HACE ÚNICO Y ESPECIAL AL NIÑO(A) 🌟 -->
                     <div class="bg-gradient-to-br from-[#FFFBEB] via-[#FEF3C7]/45 to-white rounded-3xl p-5 sm:p-6 shadow-sm border-2 border-amber-300/90 relative overflow-hidden">
                         <div class="flex items-start gap-3.5 mb-3">
                             <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 text-white text-2xl sm:text-3xl flex items-center justify-center shrink-0 shadow-sm">
@@ -629,7 +679,6 @@
                             </div>
                         </div>
 
-                        <!-- Diploma / Mensaje emotivo sobre lo especial que es el niño(a) -->
                         <div class="bg-white/95 rounded-2xl p-4 sm:p-5 border border-amber-200/90 shadow-2xs space-y-3">
                             <div>
                                 <h4 class="font-display font-extrabold text-sm sm:text-base text-nem-terracotta flex items-center gap-1.5 mb-1">
@@ -637,7 +686,7 @@
                                     <span>Lo que hace único(a) y especial a <span id="repNombreEspecial">tu hijo(a)</span>:</span>
                                 </h4>
                                 <p id="repLoEspecial" class="text-sm text-stone-700 leading-relaxed">
-                                    Descripción emotiva de sus talentos y aportación al grupo.
+                                    Descripción emotiva de sus talentos.
                                 </p>
                             </div>
 
@@ -646,24 +695,20 @@
                                     <span>🧠</span> Cómo aprende mejor:
                                 </span>
                                 <p id="repEstiloDescripcion" class="text-xs sm:text-sm text-stone-600 leading-relaxed">
-                                    Descripción pedagógica del estilo de aprendizaje.
+                                    Descripción pedagógica.
                                 </p>
                             </div>
                         </div>
 
-                        <!-- 3 Superpoderes / Estrategias prácticas para casa -->
                         <div class="mt-4">
                             <h4 class="font-display font-bold text-stone-800 text-sm sm:text-base mb-2.5 flex items-center gap-2">
                                 <span>🚀</span>
                                 <span>3 Estrategias para potenciar el talento de <span id="repNombreCortoTips">tu hijo(a)</span> en casa:</span>
                             </h4>
-                            <ul id="repTipsList" class="space-y-2">
-                                <!-- Dinámico -->
-                            </ul>
+                            <ul id="repTipsList" class="space-y-2"></ul>
                         </div>
                     </div>
 
-                    <!-- GRÁFICO VISUAL DE CALIFICACIONES POR CAMPO FORMATIVO -->
                     <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200/80">
                         <div class="flex items-center justify-between mb-3">
                             <div>
@@ -674,14 +719,9 @@
                             </div>
                             <span class="text-xl">📊</span>
                         </div>
-
-                        <!-- Barras Horizontales Visuales y Coloridas con Emojis -->
-                        <div id="repVisualBarsContainer" class="space-y-3.5 mt-3">
-                            <!-- Se genera dinámicamente -->
-                        </div>
+                        <div id="repVisualBarsContainer" class="space-y-3.5 mt-3"></div>
                     </div>
 
-                    <!-- OBSERVACIONES DETALLADAS POR CAMPO FORMATIVO (TARJETAS DESPLEGABLES LIMPIAS) -->
                     <div class="space-y-2.5">
                         <div class="flex items-center justify-between px-1">
                             <h3 class="font-display text-base sm:text-lg font-extrabold text-stone-800">
@@ -689,19 +729,14 @@
                             </h3>
                             <span class="text-[11px] font-semibold text-stone-500">Toca cada campo para leer</span>
                         </div>
-
-                        <div id="repCamposContainer" class="space-y-2.5">
-                            <!-- Tarjetas <details> generadas dinámicamente -->
-                        </div>
+                        <div id="repCamposContainer" class="space-y-2.5"></div>
                     </div>
 
-                    <!-- Botones finales de navegación -->
                     <div class="no-print grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                         <button type="button" onclick="resetStudentConsulta()"
                             class="py-3.5 px-4 rounded-2xl bg-stone-800 hover:bg-stone-900 active:scale-[0.99] transition text-white font-display font-bold text-sm shadow-sm flex items-center justify-center gap-2 cursor-pointer">
                             <span>🔄 Consultar otro alumno</span>
                         </button>
-
                         <button type="button" onclick="window.print()"
                             class="py-3.5 px-4 rounded-2xl bg-nem-forest hover:bg-nem-emerald active:scale-[0.99] transition text-white font-display font-bold text-sm shadow-sm flex items-center justify-center gap-2 cursor-pointer">
                             <span>🖨️ Imprimir / Guardar Boleta</span>
@@ -712,13 +747,9 @@
 
         </main>
 
-        <!-- ================================================================== -->
-        <!-- PANEL LATERAL QR EXCLUSIVO PARA VERSIÓN PC / ESCRITORIO (lg:flex)  -->
-        <!-- Oculto por completo en celulares y tablets (< 1024px)              -->
-        <!-- ================================================================== -->
+        <!-- PANEL QR LATERAL PC -->
         <aside id="desktopQrSidebar" aria-label="Código QR para proyección en computadora"
             class="no-print hidden lg:flex flex-col items-center w-80 shrink-0 sticky top-16 bg-white rounded-3xl p-6 shadow-md border border-stone-200/90 text-center relative">
-            <!-- Botón discreto para minimizar/ocultar el panel QR -->
             <button type="button" onclick="toggleDesktopQr()"
                 class="absolute top-3.5 right-3.5 w-8 h-8 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-800 flex items-center justify-center transition cursor-pointer"
                 title="Ocultar panel QR" aria-label="Ocultar panel del código QR">
@@ -737,16 +768,12 @@
                 Apunta la cámara de tu teléfono para seguir la presentación y consultar la boleta de tu hijo(a).
             </p>
 
-            <!-- Contenedor QR generado automáticamente con la URL actual -->
             <div class="my-4 p-3.5 bg-white rounded-2xl border-2 border-dashed border-nem-emerald/50 shadow-inner flex items-center justify-center">
                 <div id="desktopQrcodeContainer" class="w-[190px] h-[190px] flex items-center justify-center"></div>
             </div>
 
-            <!-- Enlace actual + botón copiar -->
             <div class="w-full bg-nem-cream rounded-xl p-2 border border-stone-200 flex items-center justify-between gap-2 text-left">
-                <span id="desktopQrUrlText" class="text-[11px] text-stone-600 truncate font-mono flex-1">
-                    https://...
-                </span>
+                <span id="desktopQrUrlText" class="text-[11px] text-stone-600 truncate font-mono flex-1">https://...</span>
                 <button id="btnCopyUrlDesktop" type="button"
                     class="shrink-0 px-2.5 py-1.5 rounded-lg bg-nem-forest text-white text-xs font-bold hover:bg-nem-emerald transition cursor-pointer">
                     Copiar
@@ -757,9 +784,7 @@
 
     </div>
 
-    <!-- ================================================================== -->
-    <!-- BARRA DE NAVEGACIÓN INFERIOR FIJA (ANTERIOR / SIGUIENTE)           -->
-    <!-- ================================================================== -->
+    <!-- BARRA DE NAVEGACIÓN INFERIOR FIJA -->
     <div id="bottomNavBar" class="no-print fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
         <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
             <button id="btnPrevSlide" type="button" onclick="prevSlide()" disabled
@@ -771,7 +796,7 @@
             </button>
 
             <div class="hidden sm:flex items-center gap-1.5 text-xs font-bold text-stone-500">
-                <span id="bottomSlideLabel">Diapositiva 1 de 4</span>
+                <span id="bottomSlideLabel">Diapositiva 1 de 6</span>
             </div>
 
             <button id="btnNextSlide" type="button" onclick="nextSlide()"
@@ -784,11 +809,8 @@
         </div>
     </div>
 
-    <!-- ================================================================== -->
-    <!-- SCRIPT PRINCIPAL CON DATOS EXACTOS, GRÁFICOS Y NAVEGACIÓN          -->
-    <!-- ================================================================== -->
+    <!-- SCRIPT DE DATOS Y LÓGICA -->
     <script>
-        // DATOS EXACTOS DE LOS 11 ALUMNOS (5° GRADO - PRIMER TRIMESTRE 2026-2027)
         const ALUMNOS_DATA = [
             {
                 "id": 1,
@@ -1067,27 +1089,29 @@
             }
         ];
 
-        // ESTADO DE LA PRESENTACIÓN POR DIAPOSITIVAS
         let currentSlide = 0;
         let individualUnlocked = false;
         const SLIDE_NAMES = [
-            '1/4 • Panorama',
-            '2/4 • Campos NEM',
-            '3/4 • Frecuencia',
-            '4/4 • Compromisos',
-            '5/5 • Mi Hijo(a)'
+            '1/6 • Bienvenida',
+            '2/6 • Panorama',
+            '3/6 • Proyectos STEM',
+            '4/6 • Campos NEM',
+            '5/6 • Frecuencia',
+            '6/6 • Problemáticas',
+            '7/7 • Mi Hijo(a)'
         ];
 
-        // Referencias DOM
         const slides = [
             document.getElementById('slide-0'),
             document.getElementById('slide-1'),
             document.getElementById('slide-2'),
             document.getElementById('slide-3'),
-            document.getElementById('slide-4')
+            document.getElementById('slide-4'),
+            document.getElementById('slide-5'),
+            document.getElementById('slide-6')
         ];
         const stepDots = document.querySelectorAll('.step-dot');
-        const stepDot5 = document.getElementById('stepDot5');
+        const stepDot7 = document.getElementById('stepDot7');
         const headerStepBadge = document.getElementById('headerStepBadge');
         const stepTitleShort = document.getElementById('stepTitleShort');
         const bottomSlideLabel = document.getElementById('bottomSlideLabel');
@@ -1096,7 +1120,6 @@
         const btnNextLabel = document.getElementById('btnNextLabel');
         const bottomNavBar = document.getElementById('bottomNavBar');
 
-        // Formulario individual
         const selectAlumno = document.getElementById('selectAlumno');
         const inputDia = document.getElementById('inputDia');
         const consultaForm = document.getElementById('consultaForm');
@@ -1105,7 +1128,6 @@
         const loginCard = document.getElementById('loginCard');
         const studentReport = document.getElementById('studentReport');
 
-        // 1. Inicializar selector de alumnos ordenados
         function initAlumnosSelect() {
             ALUMNOS_DATA.forEach((alumno, index) => {
                 const option = document.createElement('option');
@@ -1115,13 +1137,9 @@
             });
         }
 
-        // 2. Navegación entre diapositivas
         function goToSlide(index, direction = 'next') {
-            // Bloquear acceso a diapositiva 4 (Consulta individual) si aún no ha recorrido las de grupo
-            if (index === 4 && !individualUnlocked) {
-                return;
-            }
-            const maxSlide = individualUnlocked ? 4 : 3;
+            if (index === 6 && !individualUnlocked) return;
+            const maxSlide = individualUnlocked ? 6 : 5;
             if (index < 0 || index > maxSlide) return;
 
             currentSlide = index;
@@ -1129,18 +1147,17 @@
             slides.forEach((panel, i) => {
                 if (i === currentSlide) {
                     panel.classList.remove('hidden', 'animate-slide-next', 'animate-slide-prev');
-                    void panel.offsetWidth; // Reiniciar animación
+                    void panel.offsetWidth;
                     panel.classList.add(direction === 'prev' ? 'animate-slide-prev' : 'animate-slide-next');
                 } else {
                     panel.classList.add('hidden');
                 }
             });
 
-            // Actualizar barra de puntos superiores
             stepDots.forEach((dot, i) => {
-                if (i === 4 && !individualUnlocked) return;
+                if (i === 6 && !individualUnlocked) return;
                 if (i === currentSlide) {
-                    dot.className = 'step-dot flex-1 h-2.5 rounded-full ' + (i === 4 ? 'bg-nem-terracotta' : 'bg-nem-forest') + ' transition-all duration-300 cursor-pointer';
+                    dot.className = 'step-dot flex-1 h-2.5 rounded-full ' + (i === 6 ? 'bg-nem-terracotta' : 'bg-nem-forest') + ' transition-all duration-300 cursor-pointer';
                 } else if (i < currentSlide) {
                     dot.className = 'step-dot flex-1 h-2.5 rounded-full bg-nem-sage transition-all duration-300 cursor-pointer';
                 } else {
@@ -1148,21 +1165,18 @@
                 }
             });
 
-            // Actualizar textos de progreso
-            const totalVisible = individualUnlocked ? 5 : 4;
+            const totalVisible = individualUnlocked ? 7 : 6;
             headerStepBadge.textContent = `Diapositiva ${currentSlide + 1} de ${totalVisible}`;
             stepTitleShort.textContent = SLIDE_NAMES[currentSlide];
             bottomSlideLabel.textContent = `Diapositiva ${currentSlide + 1} de ${totalVisible}`;
 
-            // Configurar botones inferiores Anterior / Siguiente
             btnPrevSlide.disabled = (currentSlide === 0);
 
-            if (currentSlide === 4) {
-                // En la diapositiva de consulta individual ocultamos la barra inferior para dar protagonismo a la boleta
+            if (currentSlide === 6) {
                 bottomNavBar.classList.add('hidden');
             } else {
                 bottomNavBar.classList.remove('hidden');
-                if (currentSlide === 3) {
+                if (currentSlide === 5) {
                     btnNextLabel.textContent = 'Consultar mi Hijo(a) 🎓';
                     btnNextSlide.className = 'flex-1 sm:flex-initial sm:min-w-[190px] py-3 px-5 rounded-2xl bg-nem-terracotta hover:bg-nem-guinda text-white font-display font-bold text-sm shadow-sm flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer';
                 } else {
@@ -1175,7 +1189,7 @@
         }
 
         function nextSlide() {
-            if (currentSlide === 3) {
+            if (currentSlide === 5) {
                 unlockAndGoToIndividual();
             } else {
                 goToSlide(currentSlide + 1, 'next');
@@ -1188,22 +1202,20 @@
 
         function unlockAndGoToIndividual() {
             individualUnlocked = true;
-            stepDot5.classList.remove('hidden');
-            goToSlide(4, 'next');
+            stepDot7.classList.remove('hidden');
+            goToSlide(6, 'next');
         }
 
-        // Soporte para teclado (Flechas Izquierda / Derecha)
         document.addEventListener('keydown', function(e) {
             if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
             if (e.key === 'ArrowRight') {
-                if (currentSlide < 3) nextSlide();
-                else if (currentSlide === 3) unlockAndGoToIndividual();
+                if (currentSlide < 5) nextSlide();
+                else if (currentSlide === 5) unlockAndGoToIndividual();
             } else if (e.key === 'ArrowLeft') {
                 if (currentSlide > 0) prevSlide();
             }
         });
 
-        // Soporte táctil para deslizar (Swipe horizontal) en celular
         let touchStartX = 0;
         let touchStartY = 0;
         const slidesViewport = document.getElementById('slidesViewport');
@@ -1214,29 +1226,19 @@
         }, { passive: true });
 
         slidesViewport.addEventListener('touchend', function(e) {
-            const touchEndX = e.changedTouches[0].screenX;
-            const touchEndY = e.changedTouches[0].screenY;
-            const deltaX = touchEndX - touchStartX;
-            const deltaY = touchEndY - touchStartY;
-
-            // Solo activar swipe si el gesto es predominantemente horizontal (> 65px) y no estamos en la boleta
-            if (Math.abs(deltaX) > 65 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4 && currentSlide < 4) {
-                if (deltaX < 0) {
-                    nextSlide();
-                } else if (deltaX > 0 && currentSlide > 0) {
-                    prevSlide();
-                }
+            const deltaX = e.changedTouches[0].screenX - touchStartX;
+            const deltaY = e.changedTouches[0].screenY - touchStartY;
+            if (Math.abs(deltaX) > 65 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4 && currentSlide < 6) {
+                if (deltaX < 0) nextSlide();
+                else if (deltaX > 0 && currentSlide > 0) prevSlide();
             }
         }, { passive: true });
 
-        // 3. Inicializar Gráficos Interactivos con Chart.js
         function initCharts() {
             if (typeof Chart === 'undefined') return;
-
             Chart.defaults.font.family = "'Inter', sans-serif";
             Chart.defaults.color = '#4B5563';
 
-            // Gráfico 1: Dona de Distribución General del Grupo
             const ctxDona = document.getElementById('chartDonaGrupo');
             if (ctxDona) {
                 new Chart(ctxDona, {
@@ -1259,11 +1261,7 @@
                             legend: { display: false },
                             tooltip: {
                                 callbacks: {
-                                    label: function(ctx) {
-                                        const val = ctx.raw;
-                                        const pct = ((val / 11) * 100).toFixed(1);
-                                        return ` ${val} alumnos (${pct}%)`;
-                                    }
+                                    label: (ctx) => ` ${ctx.raw} alumnos (${((ctx.raw / 11) * 100).toFixed(1)}%)`
                                 }
                             }
                         }
@@ -1271,54 +1269,32 @@
                 });
             }
 
-            // Gráfico 2: Barras Comparativas por Campo Formativo
             const ctxBarras = document.getElementById('chartBarrasCampos');
             if (ctxBarras) {
                 new Chart(ctxBarras, {
                     type: 'bar',
                     data: {
-                        labels: [
-                            '📚 Lenguajes',
-                            '🔢 Saberes',
-                            '🌍 Ética y Soc.',
-                            '🤝 De lo Humano'
-                        ],
+                        labels: ['📚 Lenguajes', '🔢 Saberes', '🌍 Ética y Soc.', '🤝 De lo Humano'],
                         datasets: [{
                             label: 'Promedio Grupal',
                             data: [8.36, 7.91, 8.36, 8.27],
                             backgroundColor: ['#9E2A2B', '#D97706', '#2D6A4F', '#0284C7'],
                             borderRadius: 12,
-                            barThickness: 38
+                            barThickness: 34
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                min: 6,
-                                max: 10,
-                                ticks: { stepSize: 1, font: { weight: '600' } },
-                                grid: { color: '#E5E7EB' }
-                            },
-                            x: {
-                                ticks: { font: { weight: '700', size: 11 } },
-                                grid: { display: false }
-                            }
+                            y: { min: 6, max: 10, ticks: { stepSize: 1, font: { weight: '600' } }, grid: { color: '#E5E7EB' } },
+                            x: { ticks: { font: { weight: '700', size: 11 } }, grid: { display: false } }
                         },
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: (ctx) => ` Promedio: ${ctx.raw} / 10`
-                                }
-                            }
-                        }
+                        plugins: { legend: { display: false } }
                     }
                 });
             }
 
-            // Gráfico 3: Barras Apiladas de Frecuencia de Calificaciones (9, 8 y 7)
             const ctxFrecuencia = document.getElementById('chartFrecuenciaCampos');
             if (ctxFrecuencia) {
                 new Chart(ctxFrecuencia, {
@@ -1326,103 +1302,38 @@
                     data: {
                         labels: ['📚 Lenguajes', '🔢 Saberes', '🌍 Ética', '🤝 Humano'],
                         datasets: [
-                            {
-                                label: 'Calificación 9 (Destacado)',
-                                data: [5, 4, 5, 5],
-                                backgroundColor: '#2D6A4F',
-                                borderRadius: 6
-                            },
-                            {
-                                label: 'Calificación 8 (Satisfactorio)',
-                                data: [5, 2, 5, 4],
-                                backgroundColor: '#F59E0B',
-                                borderRadius: 6
-                            },
-                            {
-                                label: 'Calificación 7 (En Proceso)',
-                                data: [1, 5, 1, 2],
-                                backgroundColor: '#9E2A2B',
-                                borderRadius: 6
-                            }
+                            { label: 'Calificación 9', data: [5, 4, 5, 5], backgroundColor: '#2D6A4F', borderRadius: 6 },
+                            { label: 'Calificación 8', data: [5, 2, 5, 4], backgroundColor: '#F59E0B', borderRadius: 6 },
+                            { label: 'Calificación 7', data: [1, 5, 1, 2], backgroundColor: '#9E2A2B', borderRadius: 6 }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            x: {
-                                stacked: true,
-                                ticks: { font: { weight: '700', size: 11 } },
-                                grid: { display: false }
-                            },
-                            y: {
-                                stacked: true,
-                                max: 11,
-                                ticks: { stepSize: 2, font: { weight: '600' } },
-                                title: {
-                                    display: true,
-                                    text: 'Número de alumnos (Total: 11)',
-                                    font: { size: 11, weight: '600' }
-                                }
-                            }
+                            x: { stacked: true, ticks: { font: { weight: '700', size: 11 } }, grid: { display: false } },
+                            y: { stacked: true, max: 11, ticks: { stepSize: 2, font: { weight: '600' } } }
                         },
                         plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    boxWidth: 12,
-                                    padding: 12,
-                                    font: { size: 11, weight: '600' }
-                                }
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: (ctx) => ` ${ctx.dataset.label}: ${ctx.raw} alumno(s)`
-                                }
-                            }
+                            legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10, font: { size: 11, weight: '600' } } }
                         }
                     }
                 });
             }
         }
 
-        // 4. Configuración visual por calificación individual
         function getGradeBadgeConfig(score) {
-            if (score >= 9) {
-                return {
-                    label: '🌟 Desempeño Destacado',
-                    badgeBg: 'bg-emerald-100 text-nem-forest border-emerald-300',
-                    scoreBg: 'bg-nem-forest text-white',
-                    barColor: 'bg-nem-emerald',
-                    borderCard: 'border-emerald-200/90'
-                };
-            } else if (score === 8) {
-                return {
-                    label: '👍 En Consolidación',
-                    badgeBg: 'bg-amber-100 text-amber-900 border-amber-300',
-                    scoreBg: 'bg-amber-500 text-white',
-                    barColor: 'bg-amber-500',
-                    borderCard: 'border-amber-200/90'
-                };
-            } else {
-                return {
-                    label: '🌱 En Proceso (Con Apoyo)',
-                    badgeBg: 'bg-rose-100 text-nem-terracotta border-rose-300',
-                    scoreBg: 'bg-nem-terracotta text-white',
-                    barColor: 'bg-nem-terracotta',
-                    borderCard: 'border-rose-200/90'
-                };
-            }
+            if (score >= 9) return { label: '🌟 Destacado', badgeBg: 'bg-emerald-100 text-nem-forest border-emerald-300', scoreBg: 'bg-nem-forest text-white', barColor: 'bg-nem-emerald', borderCard: 'border-emerald-200/90' };
+            if (score === 8) return { label: '👍 Satisfactorio', badgeBg: 'bg-amber-100 text-amber-900 border-amber-300', scoreBg: 'bg-amber-500 text-white', barColor: 'bg-amber-500', borderCard: 'border-amber-200/90' };
+            return { label: '🌱 En Proceso', badgeBg: 'bg-rose-100 text-nem-terracotta border-rose-300', scoreBg: 'bg-nem-terracotta text-white', barColor: 'bg-nem-terracotta', borderCard: 'border-rose-200/90' };
         }
 
-        // 5. Renderizar la ficha individual celebratoria y emotiva del alumno
         function renderStudentReport(alumno) {
             document.getElementById('repNombreCompleto').textContent = alumno.nombreCompleto;
             document.getElementById('repFechaNacimiento').textContent = alumno.fechaTexto;
             document.getElementById('repPromedioEntero').textContent = alumno.promedio;
             document.getElementById('repPromedioExacto').textContent = alumno.promedioExacto.toFixed(2).replace(/\.00$/, '.0');
 
-            // Sección Emotiva: Estilo de aprendizaje y lo que hace único al niño(a)
             document.getElementById('repEstiloTitulo').textContent = alumno.estiloAprendizaje;
             document.getElementById('repNombreEspecial').textContent = alumno.nombreCorto;
             document.getElementById('repLoEspecial').textContent = alumno.loEspecial;
@@ -1434,39 +1345,15 @@
             alumno.tipsCasa.forEach((tip, idx) => {
                 const li = document.createElement('li');
                 li.className = 'flex items-start gap-3 bg-white p-3.5 rounded-2xl border border-amber-200/80 shadow-2xs';
-                li.innerHTML = `
-                    <span class="w-6 h-6 rounded-full bg-nem-terracotta text-white font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
-                    <span class="text-xs sm:text-sm text-stone-700 leading-relaxed">${tip}</span>
-                `;
+                li.innerHTML = `<span class="w-6 h-6 rounded-full bg-nem-terracotta text-white font-display font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span><span class="text-xs sm:text-sm text-stone-700 leading-relaxed">${tip}</span>`;
                 tipsList.appendChild(li);
             });
 
-            // Campos Formativos (Gráfico de barras horizontales + tarjetas desplegables)
             const campos = [
-                {
-                    emoji: '📚',
-                    titulo: 'Lenguajes',
-                    calificacion: alumno.lenguajes,
-                    observacion: alumno.obsLenguajes
-                },
-                {
-                    emoji: '🔢',
-                    titulo: 'Saberes y Pensamiento Científico',
-                    calificacion: alumno.saberes,
-                    observacion: alumno.obsSaberes
-                },
-                {
-                    emoji: '🌍',
-                    titulo: 'Ética, Naturaleza y Sociedades',
-                    calificacion: alumno.etica,
-                    observacion: alumno.obsEtica
-                },
-                {
-                    emoji: '🤝',
-                    titulo: 'De lo Humano y lo Comunitario',
-                    calificacion: alumno.humano,
-                    observacion: alumno.obsHumano
-                }
+                { emoji: '📚', titulo: 'Lenguajes', calificacion: alumno.lenguajes, observacion: alumno.obsLenguajes },
+                { emoji: '🔢', titulo: 'Saberes y Pensamiento Científico', calificacion: alumno.saberes, observacion: alumno.obsSaberes },
+                { emoji: '🌍', titulo: 'Ética, Naturaleza y Sociedades', calificacion: alumno.etica, observacion: alumno.obsEtica },
+                { emoji: '🤝', titulo: 'De lo Humano y lo Comunitario', calificacion: alumno.humano, observacion: alumno.obsHumano }
             ];
 
             const visualBarsContainer = document.getElementById('repVisualBarsContainer');
@@ -1474,27 +1361,21 @@
             visualBarsContainer.innerHTML = '';
             camposContainer.innerHTML = '';
 
-            campos.forEach((campo, idx) => {
+            campos.forEach((campo) => {
                 const cfg = getGradeBadgeConfig(campo.calificacion);
                 const widthPct = (campo.calificacion / 10) * 100;
 
-                // Barra horizontal colorida
                 const barItem = document.createElement('div');
                 barItem.innerHTML = `
                     <div class="flex items-center justify-between text-xs sm:text-sm font-bold text-stone-800 mb-1">
-                        <span class="flex items-center gap-1.5">
-                            <span>${campo.emoji}</span>
-                            <span>${campo.titulo}</span>
-                        </span>
+                        <span class="flex items-center gap-1.5"><span>${campo.emoji}</span><span>${campo.titulo}</span></span>
                         <span class="font-display font-extrabold text-base text-stone-900">${campo.calificacion} <span class="text-xs font-normal text-stone-400">/10</span></span>
                     </div>
                     <div class="w-full h-3 bg-stone-100 rounded-full overflow-hidden">
                         <div class="progress-bar-fill h-full ${cfg.barColor} rounded-full" style="width: ${widthPct}%"></div>
-                    </div>
-                `;
+                    </div>`;
                 visualBarsContainer.appendChild(barItem);
 
-                // Tarjeta desplegable (<details>) abierta por defecto en los primeros campos para fácil lectura
                 const details = document.createElement('details');
                 details.open = true;
                 details.className = `group bg-white rounded-2xl shadow-2xs border ${cfg.borderCard} overflow-hidden`;
@@ -1504,116 +1385,79 @@
                             <span class="text-xl shrink-0">${campo.emoji}</span>
                             <div>
                                 <h4 class="font-display font-bold text-stone-800 text-sm sm:text-base leading-tight">${campo.titulo}</h4>
-                                <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${cfg.badgeBg}">
-                                    ${cfg.label}
-                                </span>
+                                <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold border ${cfg.badgeBg}">${cfg.label}</span>
                             </div>
                         </div>
                         <div class="flex items-center gap-2.5 shrink-0">
-                            <div class="w-10 h-10 rounded-xl ${cfg.scoreBg} font-display font-extrabold text-lg flex items-center justify-center shadow-2xs">
-                                ${campo.calificacion}
-                            </div>
-                            <svg class="w-4 h-4 text-stone-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                            </svg>
+                            <div class="w-10 h-10 rounded-xl ${cfg.scoreBg} font-display font-extrabold text-lg flex items-center justify-center shadow-2xs">${campo.calificacion}</div>
+                            <svg class="w-4 h-4 text-stone-400 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/></svg>
                         </div>
                     </summary>
                     <div class="px-4 pb-4 pt-2 border-t border-stone-100 bg-stone-50/40">
                         <span class="block text-[10px] font-extrabold uppercase tracking-wider text-stone-400 mb-1">Observación Docente y Sugerencia:</span>
                         <p class="text-xs sm:text-sm text-stone-700 leading-relaxed">${campo.observacion}</p>
-                    </div>
-                `;
+                    </div>`;
                 camposContainer.appendChild(details);
             });
 
-            // Mostrar ficha y ocultar formulario
             loginCard.classList.add('hidden');
             studentReport.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 6. Resetear consulta para revisar otro alumno
         function resetStudentConsulta() {
             studentReport.classList.add('hidden');
             loginCard.classList.remove('hidden');
         }
 
-        // Manejador del formulario de validación del día de cumpleaños
         if (consultaForm) {
             consultaForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 errorBox.classList.add('hidden');
-
                 const selectedId = parseInt(selectAlumno.value);
                 const diaIngresado = parseInt(inputDia.value);
 
-                if (!selectedId) {
-                    errorText.textContent = 'Por favor selecciona el nombre de tu hijo(a).';
-                    errorBox.classList.remove('hidden');
-                    return;
-                }
-
-                if (isNaN(diaIngresado)) {
-                    errorText.textContent = 'Por favor escribe el día de cumpleaños de tu hijo(a).';
+                if (!selectedId || isNaN(diaIngresado)) {
+                    errorText.textContent = 'Por favor selecciona un alumno y escribe el día de cumpleaños.';
                     errorBox.classList.remove('hidden');
                     return;
                 }
 
                 const alumnoEncontrado = ALUMNOS_DATA.find(a => a.id === selectedId);
-
                 if (alumnoEncontrado && alumnoEncontrado.diaNacimiento === diaIngresado) {
                     renderStudentReport(alumnoEncontrado);
                 } else {
-                    errorText.textContent = 'El día de cumpleaños no coincide con el registro oficial. Verifica el dato e intenta nuevamente.';
+                    errorText.textContent = 'El día de cumpleaños no coincide con el registro oficial. Verifica e intenta nuevamente.';
                     errorBox.classList.remove('hidden');
                 }
             });
         }
 
-        // 8. Inicializar Código QR Exclusivo para PC (Desktop Sidebar) y Toggle
         let isDesktopQrVisible = true;
-
         function toggleDesktopQr() {
             const sidebar = document.getElementById('desktopQrSidebar');
             const mainContainer = document.getElementById('mainLayoutContainer');
             const slidesViewport = document.getElementById('slidesViewport');
-            const toggleBtn = document.getElementById('btnToggleDesktopQr');
             const toggleBtnText = document.getElementById('btnToggleDesktopQrText');
-
             if (!sidebar) return;
 
             isDesktopQrVisible = !isDesktopQrVisible;
-
             if (isDesktopQrVisible) {
                 sidebar.classList.remove('qr-collapsed');
-                if (mainContainer) mainContainer.classList.add('lg:gap-6');
-                if (mainContainer) mainContainer.classList.remove('lg:gap-0');
-                if (slidesViewport) {
-                    slidesViewport.classList.remove('max-w-4xl');
-                    slidesViewport.classList.add('max-w-3xl');
-                }
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'true');
-                if (toggleBtnText) toggleBtnText.textContent = 'Ocultar QR';
+                mainContainer.classList.add('lg:gap-6');
+                slidesViewport.classList.remove('max-w-4xl');
+                slidesViewport.classList.add('max-w-3xl');
+                toggleBtnText.textContent = 'Ocultar QR';
             } else {
                 sidebar.classList.add('qr-collapsed');
-                if (mainContainer) mainContainer.classList.remove('lg:gap-6');
-                if (mainContainer) mainContainer.classList.add('lg:gap-0');
-                if (slidesViewport) {
-                    slidesViewport.classList.remove('max-w-3xl');
-                    slidesViewport.classList.add('max-w-4xl');
-                }
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-                if (toggleBtnText) toggleBtnText.textContent = 'Mostrar QR';
+                mainContainer.classList.remove('lg:gap-6');
+                slidesViewport.classList.remove('max-w-3xl');
+                slidesViewport.classList.add('max-w-4xl');
+                toggleBtnText.textContent = 'Mostrar QR';
             }
-
-            // Redimensionar suavemente las gráficas de Chart.js tras completar la transición de ancho
             setTimeout(() => {
                 if (typeof Chart !== 'undefined' && Chart.instances) {
-                    Object.values(Chart.instances).forEach(chart => {
-                        if (chart && typeof chart.resize === 'function') {
-                            chart.resize();
-                        }
-                    });
+                    Object.values(Chart.instances).forEach(c => c && c.resize());
                 }
             }, 360);
         }
@@ -1623,7 +1467,6 @@
             const urlText = document.getElementById('desktopQrUrlText');
             const btnCopy = document.getElementById('btnCopyUrlDesktop');
             const feedback = document.getElementById('desktopCopyFeedback');
-
             const currentUrl = window.location.href;
             if (urlText) urlText.textContent = currentUrl;
 
@@ -1638,32 +1481,26 @@
                         colorLight: '#FFFFFF',
                         correctLevel: QRCode.CorrectLevel.M
                     });
-                } catch (err) {
-                    container.innerHTML = '<p class="text-xs text-stone-500 p-3">Comparte el enlace de abajo.</p>';
-                }
+                } catch (e) {}
             }
 
             if (btnCopy) {
                 btnCopy.addEventListener('click', function() {
-                    const tempInput = document.createElement('textarea');
-                    tempInput.value = window.location.href;
-                    tempInput.style.position = 'fixed';
-                    tempInput.style.opacity = '0';
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    tempInput.setSelectionRange(0, 99999);
+                    const temp = document.createElement('textarea');
+                    temp.value = window.location.href;
+                    document.body.appendChild(temp);
+                    temp.select();
                     try {
                         document.execCommand('copy');
-                        feedback.textContent = '¡Enlace copiado para WhatsApp!';
-                    } catch (err) {
-                        feedback.textContent = 'Copia el enlace manualmente.';
+                        feedback.textContent = '¡Enlace copiado!';
+                    } catch (e) {
+                        feedback.textContent = 'Copia manualmente.';
                     }
-                    document.body.removeChild(tempInput);
+                    document.body.removeChild(temp);
                 });
             }
         }
 
-        // Inicializar todo al cargar el DOM
         document.addEventListener('DOMContentLoaded', function() {
             initAlumnosSelect();
             initCharts();
